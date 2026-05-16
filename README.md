@@ -2,7 +2,7 @@
 
 Aplikasi BookStore full-stack untuk praktik demonstrasi Junior Web Developer. Aplikasi ini memakai backend Express dan database PostgreSQL, serta memiliki dua aktor:
 
-- **Admin**: mengelola kategori buku, data buku beserta upload gambar, melihat user terdaftar, pesanan, mengubah status pengiriman, dan pesan kontak.
+- **Admin**: CRUD kategori, CRUD buku beserta upload gambar, CRUD user, CRUD pesan contact, membaca/menghapus pesanan, dan mengubah status pengiriman.
 - **User**: registrasi, login, melihat About Us, mengirim pesan ke admin, mencari buku, add to cart, checkout dengan metode Payment at Delivery, dan melihat status pengiriman buku.
 
 ## Cara Menjalankan
@@ -31,6 +31,7 @@ Login demo:
 - User: `user@booknest.test` / `user123`
 
 Data demo dan perubahan CRUD tersimpan di database PostgreSQL sesuai konfigurasi `.env`.
+Saat server berjalan, aplikasi otomatis menyiapkan minimal 6 data dummy untuk kategori, buku, user, pesanan, dan pesan contact.
 
 Konfigurasi database:
 

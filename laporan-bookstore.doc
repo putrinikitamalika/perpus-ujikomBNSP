@@ -8,6 +8,7 @@
     <h2>Identitas Aplikasi</h2>
     <p><strong>Nama aplikasi:</strong> BookNest BookStore</p>
     <p><strong>Deskripsi:</strong> Aplikasi toko buku berbasis web full-stack yang menyediakan fitur admin untuk mengontrol data buku dan fitur user untuk mencari serta memesan buku. Data aplikasi tersimpan di database PostgreSQL.</p>
+    <p><strong>Data dummy:</strong> aplikasi otomatis menyediakan minimal 6 data untuk kategori, buku, user, pesanan, dan pesan contact.</p>
 
     <h2>Link GitHub</h2>
     <p>Isi setelah repository dibuat: https://github.com/username/booknest-bookstore</p>
@@ -24,10 +25,11 @@
       <li>Add, update, delete kategori buku.</li>
       <li>Add, update, delete data buku.</li>
       <li>Upload file gambar buku saat menambah atau memperbarui data buku.</li>
-      <li>Melihat daftar user yang sudah terdaftar.</li>
+      <li>Add, update, delete user yang sudah terdaftar.</li>
       <li>Melihat daftar pesanan buku dari user yang berbeda.</li>
       <li>Mengubah status pengiriman pesanan.</li>
-      <li>Melihat pesan kontak dari user.</li>
+      <li>Menghapus pesanan dari dashboard admin.</li>
+      <li>Add, update, delete pesan kontak dari user.</li>
     </ul>
 
     <h2>Fitur User</h2>

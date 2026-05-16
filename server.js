@@ -160,37 +160,72 @@ async function createTables() {
 }
 
 /**
- * Mengisi data awal saat database masih kosong.
+ * Mengisi data dummy minimal 6 item per modul tanpa menghapus data yang sudah ada.
  */
 async function seedDatabase() {
-  const categoryCount = await get("SELECT COUNT(*)::int AS total FROM categories");
-  if (categoryCount.total > 0) return;
-
   const categories = [
     ["cat-fiksi", "Fiksi"],
     ["cat-bisnis", "Bisnis"],
     ["cat-teknologi", "Teknologi"],
-    ["cat-anak", "Anak"]
+    ["cat-anak", "Anak"],
+    ["cat-pendidikan", "Pendidikan"],
+    ["cat-sejarah", "Sejarah"]
   ];
   const books = [
     ["book-atomic", "Atomic Reading", "Nadia Pratama", "cat-bisnis", 85000, 12, 4.8, "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80", "Panduan membangun kebiasaan membaca yang konsisten untuk karier dan pengembangan diri."],
     ["book-code", "Clean Code Web", "Raka Wijaya", "cat-teknologi", 125000, 8, 4.9, "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=900&q=80", "Prinsip penulisan kode web yang rapi, mudah dirawat, dan ramah kolaborasi tim."],
     ["book-novel", "Senja di Perpustakaan", "Maya Laras", "cat-fiksi", 78000, 15, 4.6, "https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=900&q=80", "Novel hangat tentang persahabatan, keberanian, dan rahasia kecil di sudut perpustakaan kota."],
-    ["book-anak", "Petualangan Aksara", "Dian Sari", "cat-anak", 52000, 20, 4.7, "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=80", "Buku cerita bergambar untuk membantu anak mengenal huruf, kata, dan nilai keberanian."]
+    ["book-anak", "Petualangan Aksara", "Dian Sari", "cat-anak", 52000, 20, 4.7, "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=80", "Buku cerita bergambar untuk membantu anak mengenal huruf, kata, dan nilai keberanian."],
+    ["book-belajar", "Belajar Efektif", "Hendra Kusuma", "cat-pendidikan", 68000, 18, 4.5, "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=900&q=80", "Strategi belajar terstruktur untuk siswa, mahasiswa, dan pembelajar mandiri."],
+    ["book-sejarah", "Jejak Nusantara", "Sinta Mahardika", "cat-sejarah", 99000, 10, 4.4, "https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=900&q=80", "Ringkasan perjalanan sejarah Nusantara dengan bahasa yang ringan dan mudah dipahami."]
   ];
   const users = [
     ["user-admin", "Admin BookNest", "admin@booknest.test", "admin123", "admin", "2026-05-16"],
-    ["user-demo", "User Demo", "user@booknest.test", "user123", "user", "2026-05-16"]
+    ["user-demo", "User Demo", "user@booknest.test", "user123", "user", "2026-05-16"],
+    ["user-andi", "Andi Prasetyo", "andi@booknest.test", "andi123", "user", "2026-05-16"],
+    ["user-sarah", "Sarah Amelia", "sarah@booknest.test", "sarah123", "user", "2026-05-16"],
+    ["user-bima", "Bima Saputra", "bima@booknest.test", "bima123", "user", "2026-05-16"],
+    ["user-laras", "Laras Wulandari", "laras@booknest.test", "laras123", "user", "2026-05-16"]
+  ];
+  const messages = [
+    ["message-001", "User Demo", "user@booknest.test", "Apakah Atomic Reading tersedia untuk pengiriman hari ini?", "2026-05-16T08:00:00.000Z"],
+    ["message-002", "Andi Prasetyo", "andi@booknest.test", "Saya ingin bertanya stok buku teknologi terbaru.", "2026-05-16T08:15:00.000Z"],
+    ["message-003", "Sarah Amelia", "sarah@booknest.test", "Apakah bisa bayar di tempat untuk wilayah Bogor?", "2026-05-16T08:30:00.000Z"],
+    ["message-004", "Bima Saputra", "bima@booknest.test", "Mohon rekomendasi buku sejarah untuk pemula.", "2026-05-16T08:45:00.000Z"],
+    ["message-005", "Laras Wulandari", "laras@booknest.test", "Kapan restock buku anak terbaru?", "2026-05-16T09:00:00.000Z"],
+    ["message-006", "Nadia Putri", "nadia@booknest.test", "Apakah ada diskon untuk pembelian lebih dari tiga buku?", "2026-05-16T09:15:00.000Z"]
+  ];
+  const orders = [
+    ["order-demo-001", "user-demo", "User Demo", "Jl. Raya Puncak Cipayung Datar", "Payment at Delivery", "Menunggu Pengiriman", "2026-05-16T09:20:00.000Z", [["book-atomic", "Atomic Reading", 85000, 1]]],
+    ["order-demo-002", "user-andi", "Andi Prasetyo", "Jl. Merdeka No. 12, Jakarta", "Payment at Delivery", "Diproses", "2026-05-16T09:35:00.000Z", [["book-code", "Clean Code Web", 125000, 1]]],
+    ["order-demo-003", "user-sarah", "Sarah Amelia", "Jl. Melati No. 8, Bogor", "Payment at Delivery", "Dikirim", "2026-05-16T09:50:00.000Z", [["book-novel", "Senja di Perpustakaan", 78000, 2]]],
+    ["order-demo-004", "user-bima", "Bima Saputra", "Jl. Diponegoro No. 21, Bandung", "Payment at Delivery", "Selesai", "2026-05-16T10:05:00.000Z", [["book-sejarah", "Jejak Nusantara", 99000, 1]]],
+    ["order-demo-005", "user-laras", "Laras Wulandari", "Jl. Kenanga No. 5, Depok", "Payment at Delivery", "Diproses", "2026-05-16T10:20:00.000Z", [["book-anak", "Petualangan Aksara", 52000, 3]]],
+    ["order-demo-006", "user-demo", "User Demo", "Jl. Raya Puncak Cipayung Datar", "Payment at Delivery", "Dikirim", "2026-05-16T10:35:00.000Z", [["book-belajar", "Belajar Efektif", 68000, 1], ["book-code", "Clean Code Web", 125000, 1]]]
   ];
 
   for (const category of categories) {
-    await run("INSERT INTO categories (id, name) VALUES ($1, $2)", category);
+    await run("INSERT INTO categories (id, name) VALUES ($1, $2) ON CONFLICT (id) DO NOTHING", category);
   }
   for (const book of books) {
-    await run("INSERT INTO books (id, title, author, category_id, price, stock, rating, image, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", book);
+    await run("INSERT INTO books (id, title, author, category_id, price, stock, rating, image, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (id) DO NOTHING", book);
   }
   for (const user of users) {
-    await run("INSERT INTO users (id, name, email, password, role, created_at) VALUES ($1, $2, $3, $4, $5, $6)", user);
+    await run("INSERT INTO users (id, name, email, password, role, created_at) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (id) DO NOTHING", user);
+  }
+  for (const message of messages) {
+    await run("INSERT INTO messages (id, name, email, message, created_at) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (id) DO NOTHING", message);
+  }
+  for (const order of orders) {
+    const [id, userId, userName, address, paymentMethod, status, createdAt, items] = order;
+    await run(`INSERT INTO orders (id, user_id, user_name, address, payment_method, status, created_at)
+      VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (id) DO NOTHING`, [id, userId, userName, address, paymentMethod, status, createdAt]);
+    for (const item of items) {
+      const existingItem = await get("SELECT id FROM order_items WHERE order_id = $1 AND book_id = $2 LIMIT 1", [id, item[0]]);
+      if (!existingItem) {
+        await run("INSERT INTO order_items (order_id, book_id, title, price, quantity) VALUES ($1, $2, $3, $4, $5)", [id, item[0], item[1], item[2], item[3]]);
+      }
+    }
   }
 }
 
@@ -253,6 +288,59 @@ app.post("/api/register", async (request, response) => {
     response.status(201).json(user);
   } catch (error) {
     sendError(response, error);
+  }
+});
+
+app.post("/api/users", async (request, response) => {
+  try {
+    const { name, email, password, role } = request.body;
+    const existingUser = await get("SELECT id FROM users WHERE email = $1", [email]);
+    if (existingUser) return response.status(409).json({ message: "Email sudah terdaftar." });
+    const user = { id: createId("user"), name, email, role, createdAt: new Date().toISOString().slice(0, 10) };
+    await run("INSERT INTO users (id, name, email, password, role, created_at) VALUES ($1, $2, $3, $4, $5, $6)", [user.id, name, email, password, role, user.createdAt]);
+    response.status(201).json(user);
+  } catch (error) {
+    sendError(response, error);
+  }
+});
+
+app.put("/api/users/:id", async (request, response) => {
+  try {
+    const { name, email, password, role } = request.body;
+    const existingUser = await get("SELECT id FROM users WHERE email = $1 AND id <> $2", [email, request.params.id]);
+    if (existingUser) return response.status(409).json({ message: "Email sudah digunakan user lain." });
+    if (password) {
+      await run("UPDATE users SET name = $1, email = $2, password = $3, role = $4 WHERE id = $5", [name, email, password, role, request.params.id]);
+    } else {
+      await run("UPDATE users SET name = $1, email = $2, role = $3 WHERE id = $4", [name, email, role, request.params.id]);
+    }
+    response.json({ id: request.params.id, name, email, role });
+  } catch (error) {
+    sendError(response, error);
+  }
+});
+
+app.delete("/api/users/:id", async (request, response) => {
+  const client = await pool.connect();
+  try {
+    if (request.params.id === "user-admin") {
+      return response.status(409).json({ message: "Akun admin demo tidak boleh dihapus." });
+    }
+    await client.query("BEGIN");
+    const orderIds = await client.query("SELECT id FROM orders WHERE user_id = $1", [request.params.id]);
+    for (const order of orderIds.rows) {
+      await client.query("DELETE FROM order_items WHERE order_id = $1", [order.id]);
+    }
+    await client.query("DELETE FROM orders WHERE user_id = $1", [request.params.id]);
+    await client.query("DELETE FROM carts WHERE user_id = $1", [request.params.id]);
+    await client.query("DELETE FROM users WHERE id = $1", [request.params.id]);
+    await client.query("COMMIT");
+    response.json({ message: "User dihapus." });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    sendError(response, error);
+  } finally {
+    client.release();
   }
 });
 
@@ -354,12 +442,47 @@ app.patch("/api/orders/:id/status", async (request, response) => {
   }
 });
 
+app.delete("/api/orders/:id", async (request, response) => {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    await client.query("DELETE FROM order_items WHERE order_id = $1", [request.params.id]);
+    await client.query("DELETE FROM orders WHERE id = $1", [request.params.id]);
+    await client.query("COMMIT");
+    response.json({ message: "Pesanan dihapus." });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    sendError(response, error);
+  } finally {
+    client.release();
+  }
+});
+
 app.post("/api/messages", async (request, response) => {
   try {
     const { name, email, message } = request.body;
     const payload = { id: createId("message"), name, email, message, createdAt: new Date().toISOString() };
     await run("INSERT INTO messages (id, name, email, message, created_at) VALUES ($1, $2, $3, $4, $5)", [payload.id, name, email, message, payload.createdAt]);
     response.status(201).json(payload);
+  } catch (error) {
+    sendError(response, error);
+  }
+});
+
+app.put("/api/messages/:id", async (request, response) => {
+  try {
+    const { name, email, message } = request.body;
+    await run("UPDATE messages SET name = $1, email = $2, message = $3 WHERE id = $4", [name, email, message, request.params.id]);
+    response.json({ id: request.params.id, name, email, message });
+  } catch (error) {
+    sendError(response, error);
+  }
+});
+
+app.delete("/api/messages/:id", async (request, response) => {
+  try {
+    await run("DELETE FROM messages WHERE id = $1", [request.params.id]);
+    response.json({ message: "Pesan dihapus." });
   } catch (error) {
     sendError(response, error);
   }

@@ -47,6 +47,8 @@ function cacheElements() {
   elements.bookDetailContent = document.querySelector("#bookDetailContent");
   elements.categoryForm = document.querySelector("#categoryForm");
   elements.bookForm = document.querySelector("#bookForm");
+  elements.userForm = document.querySelector("#userForm");
+  elements.messageForm = document.querySelector("#messageForm");
   elements.categoryTable = document.querySelector("#categoryTable");
   elements.bookTable = document.querySelector("#bookTable");
   elements.userTable = document.querySelector("#userTable");
@@ -72,6 +74,10 @@ function bindEvents() {
   document.querySelector("#resetCategoryBtn").addEventListener("click", resetCategoryForm);
   elements.bookForm.addEventListener("submit", handleBookSubmit);
   document.querySelector("#resetBookBtn").addEventListener("click", resetBookForm);
+  elements.userForm.addEventListener("submit", handleUserSubmit);
+  document.querySelector("#resetUserBtn").addEventListener("click", resetUserForm);
+  elements.messageForm.addEventListener("submit", handleAdminMessageSubmit);
+  document.querySelector("#resetMessageBtn").addEventListener("click", resetMessageForm);
   window.addEventListener("hashchange", () => showView(location.hash.replace("#", "") || "home"));
 }
 
@@ -168,7 +174,12 @@ function runAction(action, id) {
     editCategory: () => fillCategoryForm(id),
     deleteCategory: () => deleteCategory(id),
     editBook: () => fillBookForm(id),
-    deleteBook: () => deleteBook(id)
+    deleteBook: () => deleteBook(id),
+    editUser: () => fillUserForm(id),
+    deleteUser: () => deleteUser(id),
+    deleteOrder: () => deleteOrder(id),
+    editMessage: () => fillMessageForm(id),
+    deleteMessage: () => deleteMessage(id)
   };
   actions[action]?.();
 }
@@ -727,6 +738,141 @@ function resetBookForm() {
 }
 
 /**
+ * Menyimpan data user baru atau memperbarui data user lama melalui backend.
+ */
+async function handleUserSubmit(event) {
+  event.preventDefault();
+  try {
+    const id = document.querySelector("#userId").value;
+    const payload = {
+      name: document.querySelector("#userName").value.trim(),
+      email: document.querySelector("#userEmail").value.trim().toLowerCase(),
+      password: document.querySelector("#userPassword").value,
+      role: document.querySelector("#userRole").value
+    };
+    if (!id && !payload.password) {
+      showToast("Password wajib diisi untuk user baru.");
+      return;
+    }
+    await apiRequest(id ? `/api/users/${id}` : "/api/users", {
+      method: id ? "PUT" : "POST",
+      body: JSON.stringify(payload)
+    });
+    resetUserForm();
+    await refreshState();
+    showToast("Data user berhasil disimpan.");
+  } catch (error) {
+    showToast(error.message);
+  }
+}
+
+/**
+ * Mengisi form user untuk proses update.
+ */
+function fillUserForm(userId) {
+  const user = state.users.find((item) => item.id === userId);
+  if (!user) return;
+  document.querySelector("#userId").value = user.id;
+  document.querySelector("#userName").value = user.name;
+  document.querySelector("#userEmail").value = user.email;
+  document.querySelector("#userPassword").value = "";
+  document.querySelector("#userRole").value = user.role;
+}
+
+/**
+ * Menghapus user beserta data terkaitnya dari database.
+ */
+async function deleteUser(userId) {
+  try {
+    await apiRequest(`/api/users/${userId}`, { method: "DELETE" });
+    resetUserForm();
+    await refreshState();
+    showToast("User berhasil dihapus.");
+  } catch (error) {
+    showToast(error.message);
+  }
+}
+
+/**
+ * Mengosongkan form user.
+ */
+function resetUserForm() {
+  elements.userForm.reset();
+  document.querySelector("#userId").value = "";
+}
+
+/**
+ * Menghapus pesanan dari database.
+ */
+async function deleteOrder(orderId) {
+  try {
+    await apiRequest(`/api/orders/${orderId}`, { method: "DELETE" });
+    await refreshState();
+    showToast("Pesanan berhasil dihapus.");
+  } catch (error) {
+    showToast(error.message);
+  }
+}
+
+/**
+ * Menyimpan pesan admin baru atau memperbarui pesan lama.
+ */
+async function handleAdminMessageSubmit(event) {
+  event.preventDefault();
+  try {
+    const id = document.querySelector("#messageId").value;
+    const payload = {
+      name: document.querySelector("#messageName").value.trim(),
+      email: document.querySelector("#messageEmail").value.trim(),
+      message: document.querySelector("#messageText").value.trim()
+    };
+    await apiRequest(id ? `/api/messages/${id}` : "/api/messages", {
+      method: id ? "PUT" : "POST",
+      body: JSON.stringify(payload)
+    });
+    resetMessageForm();
+    await refreshState();
+    showToast("Pesan berhasil disimpan.");
+  } catch (error) {
+    showToast(error.message);
+  }
+}
+
+/**
+ * Mengisi form pesan untuk proses update.
+ */
+function fillMessageForm(messageId) {
+  const message = state.messages.find((item) => item.id === messageId);
+  if (!message) return;
+  document.querySelector("#messageId").value = message.id;
+  document.querySelector("#messageName").value = message.name;
+  document.querySelector("#messageEmail").value = message.email;
+  document.querySelector("#messageText").value = message.message;
+}
+
+/**
+ * Menghapus pesan contact dari database.
+ */
+async function deleteMessage(messageId) {
+  try {
+    await apiRequest(`/api/messages/${messageId}`, { method: "DELETE" });
+    resetMessageForm();
+    await refreshState();
+    showToast("Pesan berhasil dihapus.");
+  } catch (error) {
+    showToast(error.message);
+  }
+}
+
+/**
+ * Mengosongkan form pesan admin.
+ */
+function resetMessageForm() {
+  elements.messageForm.reset();
+  document.querySelector("#messageId").value = "";
+}
+
+/**
  * Merender seluruh tabel dan daftar pada dashboard admin.
  */
 function renderAdmin() {
@@ -788,7 +934,16 @@ function renderBookTable() {
  */
 function renderUserTable() {
   elements.userTable.innerHTML = state.users.map((user) => `
-    <tr><td>${user.name}</td><td>${user.email}</td><td>${user.role}</td><td>${user.createdAt}</td></tr>
+    <tr>
+      <td>${user.name}</td>
+      <td>${user.email}</td>
+      <td>${user.role}</td>
+      <td>${user.createdAt}</td>
+      <td class="text-end">
+        <button class="btn btn-outline-secondary btn-sm" type="button" data-action="editUser" data-id="${user.id}"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-outline-danger btn-sm" type="button" data-action="deleteUser" data-id="${user.id}"><i class="bi bi-trash"></i></button>
+      </td>
+    </tr>
   `).join("");
 }
 
@@ -817,6 +972,7 @@ function renderOrderList() {
               <div class="input-group">
                 <select id="status-${order.id}" class="form-select form-select-sm" data-order-status="${order.id}">${options}</select>
                 <button class="btn btn-outline-success btn-sm" type="button" data-action="updateOrderStatus" data-id="${order.id}">Update</button>
+                <button class="btn btn-outline-danger btn-sm" type="button" data-action="deleteOrder" data-id="${order.id}"><i class="bi bi-trash"></i></button>
               </div>
             </div>
           </div>
@@ -831,7 +987,20 @@ function renderOrderList() {
  */
 function renderMessageList() {
   elements.messageList.innerHTML = state.messages.length
-    ? state.messages.map((message) => `<div class="border-bottom py-3"><strong>${message.name}</strong> <span class="text-secondary">${message.email}</span><p class="mb-0">${message.message}</p></div>`).join("")
+    ? state.messages.map((message) => `
+      <div class="border-bottom py-3">
+        <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
+          <div>
+            <strong>${message.name}</strong> <span class="text-secondary">${message.email}</span>
+            <p class="mb-0">${message.message}</p>
+          </div>
+          <div class="text-lg-end">
+            <button class="btn btn-outline-secondary btn-sm" type="button" data-action="editMessage" data-id="${message.id}"><i class="bi bi-pencil"></i></button>
+            <button class="btn btn-outline-danger btn-sm" type="button" data-action="deleteMessage" data-id="${message.id}"><i class="bi bi-trash"></i></button>
+          </div>
+        </div>
+      </div>
+    `).join("")
     : '<p class="mb-0 text-secondary">Belum ada pesan.</p>';
 }
 

@@ -235,8 +235,19 @@
             </div>
 
             <div id="userPane" class="tab-pane fade">
-              <div class="admin-panel table-responsive">
-                <table class="table align-middle"><thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Terdaftar</th></tr></thead><tbody id="userTable"></tbody></table>
+              <div class="admin-panel">
+                <form id="userForm" class="row g-3 mb-4">
+                  <input id="userId" type="hidden">
+                  <div class="col-md-3"><label class="form-label" for="userName">Nama</label><input id="userName" class="form-control" required></div>
+                  <div class="col-md-3"><label class="form-label" for="userEmail">Email</label><input id="userEmail" class="form-control" type="email" required></div>
+                  <div class="col-md-3"><label class="form-label" for="userPassword">Password</label><input id="userPassword" class="form-control" type="password" minlength="6" placeholder="Isi untuk baru/ganti"></div>
+                  <div class="col-md-2"><label class="form-label" for="userRole">Role</label><select id="userRole" class="form-select"><option value="user">user</option><option value="admin">admin</option></select></div>
+                  <div class="col-md-1 d-flex align-items-end"><button class="btn btn-success w-100" type="submit">Simpan</button></div>
+                  <div class="col-12"><button class="btn btn-outline-secondary btn-sm" id="resetUserBtn" type="button">Reset User</button></div>
+                </form>
+                <div class="table-responsive">
+                  <table class="table align-middle"><thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Terdaftar</th><th class="text-end">Aksi</th></tr></thead><tbody id="userTable"></tbody></table>
+                </div>
               </div>
             </div>
 
@@ -245,7 +256,16 @@
             </div>
 
             <div id="messagePane" class="tab-pane fade">
-              <div class="admin-panel" id="messageList"></div>
+              <div class="admin-panel">
+                <form id="messageForm" class="row g-3 mb-4">
+                  <input id="messageId" type="hidden">
+                  <div class="col-md-3"><label class="form-label" for="messageName">Nama</label><input id="messageName" class="form-control" required></div>
+                  <div class="col-md-3"><label class="form-label" for="messageEmail">Email</label><input id="messageEmail" class="form-control" type="email" required></div>
+                  <div class="col-md-4"><label class="form-label" for="messageText">Pesan</label><input id="messageText" class="form-control" required></div>
+                  <div class="col-md-2 d-flex align-items-end gap-2"><button class="btn btn-success flex-fill" type="submit">Simpan</button><button class="btn btn-outline-secondary" id="resetMessageBtn" type="button">Reset</button></div>
+                </form>
+                <div id="messageList"></div>
+              </div>
             </div>
           </div>
         </div>
