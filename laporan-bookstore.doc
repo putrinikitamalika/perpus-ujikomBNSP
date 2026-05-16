@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Laporan Praktik Demonstrasi Aplikasi BookStore</title>
+  </head>
+  <body>
+    <h1>Laporan Praktik Demonstrasi Aplikasi BookStore</h1>
+    <h2>Identitas Aplikasi</h2>
+    <p><strong>Nama aplikasi:</strong> BookNest BookStore</p>
+    <p><strong>Deskripsi:</strong> Aplikasi toko buku berbasis web full-stack yang menyediakan fitur admin untuk mengontrol data buku dan fitur user untuk mencari serta memesan buku. Data aplikasi tersimpan di database PostgreSQL.</p>
+
+    <h2>Link GitHub</h2>
+    <p>Isi setelah repository dibuat: https://github.com/username/booknest-bookstore</p>
+
+    <h2>Link Rancangan / Mockup</h2>
+    <p>File mockup lokal: mockup.html. Setelah upload ke GitHub Pages, isi link publik mockup di bagian ini.</p>
+
+    <h2>Akun Demo</h2>
+    <p>Admin: admin@booknest.test / admin123</p>
+    <p>User: user@booknest.test / user123</p>
+
+    <h2>Fitur Admin</h2>
+    <ul>
+      <li>Add, update, delete kategori buku.</li>
+      <li>Add, update, delete data buku.</li>
+      <li>Melihat daftar user yang sudah terdaftar.</li>
+      <li>Melihat daftar pesanan buku dari user yang berbeda.</li>
+      <li>Mengubah status pengiriman pesanan.</li>
+      <li>Melihat pesan kontak dari user.</li>
+    </ul>
+
+    <h2>Fitur User</h2>
+    <ul>
+      <li>Registrasi user.</li>
+      <li>Login user.</li>
+      <li>Melihat halaman About Us.</li>
+      <li>Mengirim pesan ke admin.</li>
+      <li>Pencarian buku.</li>
+      <li>Add to cart buku.</li>
+      <li>Checkout dengan Payment at Delivery.</li>
+      <li>Melihat status pengiriman buku pada menu Pesanan Saya.</li>
+    </ul>
+
+    <h2>Teknologi dan Library</h2>
+    <ul>
+      <li>HTML5 untuk struktur aplikasi.</li>
+      <li>CSS3 untuk styling responsif.</li>
+      <li>JavaScript untuk pemrograman terstruktur.</li>
+      <li>Node.js dan Express.js untuk backend API.</li>
+      <li>PostgreSQL sebagai database.</li>
+      <li>Bootstrap 5 sebagai library UI pre-existing.</li>
+      <li>Bootstrap Icons sebagai library ikon.</li>
+    </ul>
+
+    <h2>Organisasi File</h2>
+    <ul>
+      <li>index.html: halaman utama aplikasi.</li>
+      <li>styles.css: file style aplikasi.</li>
+      <li>app.js: fungsi frontend dan pemanggilan API.</li>
+      <li>server.js: backend API, tabel database, dan seed data awal.</li>
+      <li>package.json: dependency dan script aplikasi.</li>
+      <li>.env: konfigurasi koneksi PostgreSQL.</li>
+      <li>.env.example: contoh konfigurasi environment.</li>
+      <li>mockup.html: rancangan sederhana aplikasi.</li>
+      <li>README.md: petunjuk menjalankan aplikasi.</li>
+    </ul>
+
+    <h2>Screenshot Tampilan Aplikasi</h2>
+    <p>Tambahkan screenshot Home, Katalog, Login/Registrasi, Keranjang, Dashboard Admin Kategori, Dashboard Admin Buku, User, Pesanan, dan Pesan.</p>
+
+    <h2>Sumber Gambar</h2>
+    <p>Gambar berasal dari Unsplash dan digunakan sesuai referensi lisensi: https://unsplash.com/license</p>
+
+    <h2>Kesimpulan</h2>
+    <p>Aplikasi BookNest BookStore telah menerapkan eksekusi bahasa pemrograman berbasis teks, grafik, dan multimedia melalui halaman web responsif, gambar dari internet, backend API, database PostgreSQL, struktur file rapi, komentar pada fungsi, pemrograman terstruktur, serta penggunaan library Bootstrap.</p>
+  </body>
+</html>

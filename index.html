@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aplikasi demo BookStore untuk admin dan user.">
+    <title>BookNest BookStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#home" data-view="home">
+          <i class="bi bi-book-half text-success"></i>
+          BookNest
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Buka navigasi">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item"><a class="nav-link" href="#catalog" data-view="catalog">Katalog</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about" data-view="about">About Us</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact" data-view="contact">Contact</a></li>
+            <li class="nav-item user-only d-none"><a class="nav-link" href="#myOrders" data-view="myOrders">Pesanan Saya</a></li>
+            <li class="nav-item user-only d-none">
+              <button class="btn btn-outline-success btn-sm position-relative" type="button" data-view="cart">
+                <i class="bi bi-cart3"></i>
+                <span class="cart-count badge text-bg-success">0</span>
+              </button>
+            </li>
+            <li class="nav-item admin-only d-none"><button class="btn btn-outline-dark btn-sm" type="button" data-view="admin">Admin</button></li>
+            <li class="nav-item guest-only"><button class="btn btn-success btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#authModal">Login</button></li>
+            <li class="nav-item auth-only d-none">
+              <button class="btn btn-light btn-sm border" id="logoutBtn" type="button"><i class="bi bi-box-arrow-right"></i> Logout</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <section id="homeView" class="view-section hero-section">
+        <div class="hero-overlay"></div>
+        <div class="container position-relative">
+          <div class="hero-copy">
+            <span class="badge text-bg-light mb-3">BookStore Demo</span>
+            <h1 class="display-4 fw-bold text-white">BookNest</h1>
+            <p class="lead text-white-75">Kelola koleksi buku, kategori, user, kontak admin, keranjang, dan pesanan dalam satu aplikasi web.</p>
+            <div class="d-flex gap-2 flex-wrap">
+              <button class="btn btn-success btn-lg" type="button" data-view="catalog"><i class="bi bi-search"></i> Cari Buku</button>
+              <button class="btn btn-light btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#authModal"><i class="bi bi-person-plus"></i> Mulai</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="catalogView" class="view-section py-5 d-none">
+        <div class="container">
+          <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-end mb-4">
+            <div>
+              <p class="section-kicker mb-1">Katalog</p>
+              <h2 class="fw-bold mb-1">Pencarian Buku</h2>
+              <p class="text-secondary mb-0">Telusuri buku berdasarkan judul, penulis, kategori, atau deskripsi.</p>
+            </div>
+            <div class="catalog-tools">
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input id="searchInput" class="form-control" type="search" placeholder="Cari buku...">
+              </div>
+              <select id="categoryFilter" class="form-select" aria-label="Filter kategori"></select>
+            </div>
+          </div>
+          <div id="bookGrid" class="book-grid"></div>
+        </div>
+      </section>
+
+      <section id="aboutView" class="view-section py-5 d-none">
+        <div class="container">
+          <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+              <p class="section-kicker mb-1">About Us</p>
+              <h2 class="fw-bold">Toko Buku Digital untuk Praktik Demonstrasi</h2>
+              <p class="text-secondary">BookNest dibuat sebagai aplikasi demonstrasi dengan dua aktor utama: Admin yang mengelola data operasional, dan User yang melakukan pembelian buku.</p>
+              <div class="row g-3">
+                <div class="col-sm-6"><div class="metric-box"><strong>CRUD</strong><span>Kategori & Buku</span></div></div>
+                <div class="col-sm-6"><div class="metric-box"><strong>Order</strong><span>Keranjang & Pesanan</span></div></div>
+                <div class="col-sm-6"><div class="metric-box"><strong>Auth</strong><span>Registrasi & Login</span></div></div>
+                <div class="col-sm-6"><div class="metric-box"><strong>Admin</strong><span>User, Kontak, Pesanan</span></div></div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <img class="rounded-2 shadow-sm w-100 about-image" src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1200&q=80" alt="Rak buku perpustakaan">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contactView" class="view-section py-5 d-none">
+        <div class="container">
+          <div class="row g-4">
+            <div class="col-lg-5">
+              <p class="section-kicker mb-1">Contact</p>
+              <h2 class="fw-bold">Kirim Pesan ke Admin</h2>
+              <p class="text-secondary">Pertanyaan dari user akan masuk ke daftar pesan pada dashboard admin.</p>
+            </div>
+            <div class="col-lg-7">
+              <form id="contactForm" class="panel-form">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label" for="contactName">Nama</label>
+                    <input id="contactName" class="form-control" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="contactEmail">Email</label>
+                    <input id="contactEmail" class="form-control" type="email" required>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label" for="contactMessage">Pesan</label>
+                    <textarea id="contactMessage" class="form-control" rows="5" required></textarea>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-success" type="submit"><i class="bi bi-send"></i> Kirim Pesan</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="cartView" class="view-section py-5 d-none">
+        <div class="container">
+          <p class="section-kicker mb-1">Cart</p>
+          <h2 class="fw-bold mb-4">Keranjang Buku</h2>
+          <div class="row g-4">
+            <div class="col-lg-8">
+              <div id="cartList" class="list-group cart-list"></div>
+            </div>
+            <div class="col-lg-4">
+              <div class="order-summary">
+                <h3 class="h5 fw-bold">Ringkasan Pesanan</h3>
+                <div class="d-flex justify-content-between"><span>Total Item</span><strong id="summaryItems">0</strong></div>
+                <div class="d-flex justify-content-between"><span>Total Bayar</span><strong id="summaryTotal">Rp0</strong></div>
+                <hr>
+                <form id="checkoutForm">
+                  <label class="form-label" for="deliveryAddress">Alamat Pengiriman</label>
+                  <textarea id="deliveryAddress" class="form-control mb-3" rows="3" required></textarea>
+                  <label class="form-label" for="paymentMethod">Metode Pembayaran</label>
+                  <select id="paymentMethod" class="form-select mb-3" required>
+                    <option value="Payment at Delivery">Payment at Delivery</option>
+                  </select>
+                  <button class="btn btn-success w-100" type="submit"><i class="bi bi-bag-check"></i> Buat Pesanan</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="myOrdersView" class="view-section py-5 d-none">
+        <div class="container">
+          <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-end mb-4">
+            <div>
+              <p class="section-kicker mb-1">Pesanan Saya</p>
+              <h2 class="fw-bold mb-1">Status Pengiriman Buku</h2>
+              <p class="text-secondary mb-0">Pantau status pesanan dan metode pembayaran buku yang sudah dibuat.</p>
+            </div>
+            <button class="btn btn-outline-success" type="button" data-action="refreshMyOrders">
+              <i class="bi bi-arrow-clockwise"></i> Refresh Status
+            </button>
+          </div>
+          <div id="myOrderList" class="order-status-list"></div>
+        </div>
+      </section>
+
+      <section id="adminView" class="view-section py-5 d-none">
+        <div class="container">
+          <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+            <div>
+              <p class="section-kicker mb-1">Admin</p>
+              <h2 class="fw-bold mb-0">Dashboard Control Buku</h2>
+            </div>
+            <div class="admin-stats" id="adminStats"></div>
+          </div>
+
+          <ul class="nav nav-pills mb-4" id="adminTabs" role="tablist">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#categoryPane" type="button">Kategori</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#bookPane" type="button">Buku</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#userPane" type="button">User</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#orderPane" type="button">Pesanan</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#messagePane" type="button">Pesan</button></li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="categoryPane" class="tab-pane fade show active">
+              <div class="admin-panel">
+                <form id="categoryForm" class="row g-3 align-items-end mb-4">
+                  <input id="categoryId" type="hidden">
+                  <div class="col-md-8">
+                    <label class="form-label" for="categoryName">Nama Kategori</label>
+                    <input id="categoryName" class="form-control" required>
+                  </div>
+                  <div class="col-md-4 d-flex gap-2">
+                    <button class="btn btn-success flex-fill" type="submit">Simpan</button>
+                    <button class="btn btn-outline-secondary" id="resetCategoryBtn" type="button">Reset</button>
+                  </div>
+                </form>
+                <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Kategori</th><th class="text-end">Aksi</th></tr></thead><tbody id="categoryTable"></tbody></table></div>
+              </div>
+            </div>
+
+            <div id="bookPane" class="tab-pane fade">
+              <div class="admin-panel">
+                <form id="bookForm" class="row g-3 mb-4">
+                  <input id="bookId" type="hidden">
+                  <div class="col-md-6"><label class="form-label" for="bookTitle">Judul</label><input id="bookTitle" class="form-control" required></div>
+                  <div class="col-md-6"><label class="form-label" for="bookAuthor">Penulis</label><input id="bookAuthor" class="form-control" required></div>
+                  <div class="col-md-4"><label class="form-label" for="bookCategory">Kategori</label><select id="bookCategory" class="form-select" required></select></div>
+                  <div class="col-md-4"><label class="form-label" for="bookPrice">Harga</label><input id="bookPrice" class="form-control" type="number" min="1000" required></div>
+                  <div class="col-md-4"><label class="form-label" for="bookStock">Stok</label><input id="bookStock" class="form-control" type="number" min="0" required></div>
+                  <div class="col-md-8"><label class="form-label" for="bookImage">URL Gambar</label><input id="bookImage" class="form-control" type="url" required></div>
+                  <div class="col-md-4"><label class="form-label" for="bookRating">Rating</label><input id="bookRating" class="form-control" type="number" min="1" max="5" step="0.1" required></div>
+                  <div class="col-12"><label class="form-label" for="bookDescription">Deskripsi</label><textarea id="bookDescription" class="form-control" rows="3" required></textarea></div>
+                  <div class="col-12 d-flex gap-2"><button class="btn btn-success" type="submit">Simpan Buku</button><button class="btn btn-outline-secondary" id="resetBookBtn" type="button">Reset</button></div>
+                </form>
+                <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Buku</th><th>Kategori</th><th>Harga</th><th>Stok</th><th class="text-end">Aksi</th></tr></thead><tbody id="bookTable"></tbody></table></div>
+              </div>
+            </div>
+
+            <div id="userPane" class="tab-pane fade">
+              <div class="admin-panel table-responsive">
+                <table class="table align-middle"><thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Terdaftar</th></tr></thead><tbody id="userTable"></tbody></table>
+              </div>
+            </div>
+
+            <div id="orderPane" class="tab-pane fade">
+              <div class="admin-panel" id="orderList"></div>
+            </div>
+
+            <div id="messagePane" class="tab-pane fade">
+              <div class="admin-panel" id="messageList"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title h5">Akses BookNest</h2>
+            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Tutup"></button>
+          </div>
+          <div class="modal-body">
+            <ul class="nav nav-tabs mb-3" role="tablist">
+              <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#loginPane" type="button">Login</button></li>
+              <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#registerPane" type="button">Registrasi</button></li>
+            </ul>
+            <div class="tab-content">
+              <form id="loginForm" class="tab-pane fade show active">
+                <div class="mb-3"><label class="form-label" for="loginEmail">Email</label><input id="loginEmail" class="form-control" type="email" required></div>
+                <div class="mb-3"><label class="form-label" for="loginPassword">Password</label><input id="loginPassword" class="form-control" type="password" required></div>
+                <button class="btn btn-success w-100" type="submit">Login</button>
+                <p class="small text-secondary mt-3 mb-0">Demo Admin: admin@booknest.test / admin123<br>Demo User: user@booknest.test / user123</p>
+              </form>
+              <form id="registerForm" class="tab-pane fade">
+                <div class="mb-3"><label class="form-label" for="registerName">Nama</label><input id="registerName" class="form-control" required></div>
+                <div class="mb-3"><label class="form-label" for="registerEmail">Email</label><input id="registerEmail" class="form-control" type="email" required></div>
+                <div class="mb-3"><label class="form-label" for="registerPassword">Password</label><input id="registerPassword" class="form-control" type="password" minlength="6" required></div>
+                <button class="btn btn-success w-100" type="submit">Daftar User</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="bookDetailModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="bookDetailContent"></div>
+      </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="appToast" class="toast" role="status" aria-live="polite" aria-atomic="true">
+        <div class="toast-body"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

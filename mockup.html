@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mockup BookNest</title>
+    <style>
+      body { margin: 0; font-family: Arial, sans-serif; color: #1d2520; background: #f5f7f4; }
+      header, section { padding: 28px; }
+      header { background: #ffffff; border-bottom: 1px solid #dbe3dc; display: flex; justify-content: space-between; gap: 16px; }
+      .brand { font-weight: 700; color: #198754; }
+      .wire { border: 2px dashed #9bb3a3; border-radius: 8px; background: #ffffff; padding: 18px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+      .hero { min-height: 260px; display: grid; place-items: center; background: #234132; color: #ffffff; }
+      .bar { height: 16px; background: #dbe3dc; border-radius: 4px; margin: 10px 0; }
+      .button { display: inline-block; padding: 10px 16px; background: #198754; color: white; border-radius: 6px; margin-top: 10px; }
+      .panel { min-height: 180px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">BookNest</div>
+      <nav>Home · Katalog · About · Contact · Login</nav>
+    </header>
+    <section class="hero">
+      <div>
+        <h1>BookNest BookStore</h1>
+        <p>Hero dengan gambar rak buku, CTA pencarian, dan tombol login.</p>
+        <span class="button">Cari Buku</span>
+      </div>
+    </section>
+    <section>
+      <h2>Mockup Katalog User</h2>
+      <div class="wire">
+        <div class="bar"></div>
+        <div class="grid">
+          <div class="wire panel">Card Buku + Detail + Add to Cart</div>
+          <div class="wire panel">Card Buku + Detail + Add to Cart</div>
+          <div class="wire panel">Card Buku + Detail + Add to Cart</div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>Mockup Dashboard Admin</h2>
+      <div class="grid">
+        <div class="wire panel">Form CRUD Kategori</div>
+        <div class="wire panel">Form CRUD Buku</div>
+        <div class="wire panel">List User</div>
+        <div class="wire panel">List Pesanan dan Pesan</div>
+      </div>
+    </section>
+  </body>
+</html>
