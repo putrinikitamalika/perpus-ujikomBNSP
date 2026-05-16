@@ -76,11 +76,12 @@ function bindEvents() {
 }
 
 /**
- * Memanggil API backend dengan format JSON dan penanganan error konsisten.
+ * Memanggil API backend dengan format JSON/FormData dan penanganan error konsisten.
  */
 async function apiRequest(url, options = {}) {
+  const isFormData = options.body instanceof FormData;
   const response = await fetch(url, {
-    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+    headers: isFormData ? (options.headers || {}) : { "Content-Type": "application/json", ...(options.headers || {}) },
     ...options
   });
   const data = response.status === 204 ? null : await response.json();
@@ -641,19 +642,24 @@ function resetCategoryForm() {
 }
 
 /**
- * Membaca nilai form buku dan membentuk payload API.
+ * Membaca nilai form buku dan membentuk payload upload gambar.
  */
 function getBookPayload() {
-  return {
-    title: document.querySelector("#bookTitle").value.trim(),
-    author: document.querySelector("#bookAuthor").value.trim(),
-    categoryId: document.querySelector("#bookCategory").value,
-    price: Number(document.querySelector("#bookPrice").value),
-    stock: Number(document.querySelector("#bookStock").value),
-    rating: Number(document.querySelector("#bookRating").value),
-    image: document.querySelector("#bookImage").value.trim(),
-    description: document.querySelector("#bookDescription").value.trim()
-  };
+  const formData = new FormData();
+  formData.append("title", document.querySelector("#bookTitle").value.trim());
+  formData.append("author", document.querySelector("#bookAuthor").value.trim());
+  formData.append("categoryId", document.querySelector("#bookCategory").value);
+  formData.append("price", document.querySelector("#bookPrice").value);
+  formData.append("stock", document.querySelector("#bookStock").value);
+  formData.append("rating", document.querySelector("#bookRating").value);
+  formData.append("description", document.querySelector("#bookDescription").value.trim());
+
+  const imageFile = document.querySelector("#bookImageFile").files[0];
+  if (imageFile) {
+    formData.append("imageFile", imageFile);
+  }
+
+  return formData;
 }
 
 /**
@@ -663,9 +669,14 @@ async function handleBookSubmit(event) {
   event.preventDefault();
   try {
     const id = document.querySelector("#bookId").value;
+    const imageFile = document.querySelector("#bookImageFile").files[0];
+    if (!id && !imageFile) {
+      showToast("Gambar buku wajib diupload untuk data buku baru.");
+      return;
+    }
     await apiRequest(id ? `/api/books/${id}` : "/api/books", {
       method: id ? "PUT" : "POST",
-      body: JSON.stringify(getBookPayload())
+      body: getBookPayload()
     });
     resetBookForm();
     await refreshState();
@@ -688,7 +699,8 @@ function fillBookForm(bookId) {
   document.querySelector("#bookPrice").value = book.price;
   document.querySelector("#bookStock").value = book.stock;
   document.querySelector("#bookRating").value = book.rating;
-  document.querySelector("#bookImage").value = book.image;
+  document.querySelector("#bookImageFile").value = "";
+  document.querySelector("#bookImagePreview").innerHTML = `Gambar saat ini: <a href="${book.image}" target="_blank" rel="noopener">lihat gambar</a>. Upload file baru jika ingin mengganti.`;
   document.querySelector("#bookDescription").value = book.description;
 }
 
@@ -711,6 +723,7 @@ async function deleteBook(bookId) {
 function resetBookForm() {
   elements.bookForm.reset();
   document.querySelector("#bookId").value = "";
+  document.querySelector("#bookImagePreview").textContent = "Upload gambar wajib untuk buku baru. Saat update, kosongkan jika gambar tidak berubah.";
 }
 
 /**

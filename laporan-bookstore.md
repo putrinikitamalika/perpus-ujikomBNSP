@@ -34,6 +34,7 @@ User:
 
 - Add, update, delete kategori buku.
 - Add, update, delete data buku.
+- Upload file gambar buku saat menambah atau memperbarui data buku.
 - Melihat daftar user yang sudah terdaftar.
 - Melihat daftar pesanan buku dari user yang berbeda.
 - Mengubah status pengiriman pesanan.

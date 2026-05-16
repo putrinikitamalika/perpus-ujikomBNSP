@@ -2,11 +2,15 @@
 
 require("dotenv").config();
 
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
+const multer = require("multer");
 const { Pool } = require("pg");
 
 const app = express();
 const PORT = process.env.PORT || 4173;
+const uploadDirectory = path.join(__dirname, "uploads", "books");
 
 const pool = new Pool({
   host: process.env.DB_HOST || "127.0.0.1",
@@ -18,6 +22,31 @@ const pool = new Pool({
 
 app.use(express.json());
 app.use(express.static(__dirname));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+fs.mkdirSync(uploadDirectory, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: (request, file, callback) => {
+    callback(null, uploadDirectory);
+  },
+  filename: (request, file, callback) => {
+    const extension = path.extname(file.originalname).toLowerCase();
+    callback(null, `${Date.now()}-${Math.random().toString(16).slice(2)}${extension}`);
+  }
+});
+
+const upload = multer({
+  storage,
+  fileFilter: (request, file, callback) => {
+    if (!file.mimetype.startsWith("image/")) {
+      callback(new Error("File harus berupa gambar."));
+      return;
+    }
+    callback(null, true);
+  },
+  limits: { fileSize: 2 * 1024 * 1024 }
+});
 
 /**
  * Menjalankan query PostgreSQL dan mengembalikan hasil mentah dari driver.
@@ -62,6 +91,13 @@ function createId(prefix) {
  */
 function sendError(response, error, status = 500) {
   response.status(status).json({ message: error.message || "Terjadi kesalahan server." });
+}
+
+/**
+ * Mengambil path publik file upload untuk disimpan ke database.
+ */
+function getUploadedImagePath(file) {
+  return file ? `/uploads/books/${file.filename}` : null;
 }
 
 /**
@@ -359,9 +395,11 @@ app.delete("/api/categories/:id", async (request, response) => {
   }
 });
 
-app.post("/api/books", async (request, response) => {
+app.post("/api/books", upload.single("imageFile"), async (request, response) => {
   try {
     const book = { ...request.body, id: createId("book") };
+    book.image = getUploadedImagePath(request.file);
+    if (!book.image) return response.status(400).json({ message: "Gambar buku wajib diupload." });
     await run("INSERT INTO books (id, title, author, category_id, price, stock, rating, image, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", [
       book.id, book.title, book.author, book.categoryId, book.price, book.stock, book.rating, book.image, book.description
     ]);
@@ -371,13 +409,16 @@ app.post("/api/books", async (request, response) => {
   }
 });
 
-app.put("/api/books/:id", async (request, response) => {
+app.put("/api/books/:id", upload.single("imageFile"), async (request, response) => {
   try {
     const book = request.body;
+    const uploadedImage = getUploadedImagePath(request.file);
+    const existingBook = await get("SELECT image FROM books WHERE id = $1", [request.params.id]);
+    const image = uploadedImage || existingBook?.image;
     await run("UPDATE books SET title = $1, author = $2, category_id = $3, price = $4, stock = $5, rating = $6, image = $7, description = $8 WHERE id = $9", [
-      book.title, book.author, book.categoryId, book.price, book.stock, book.rating, book.image, book.description, request.params.id
+      book.title, book.author, book.categoryId, book.price, book.stock, book.rating, image, book.description, request.params.id
     ]);
-    response.json({ ...book, id: request.params.id });
+    response.json({ ...book, image, id: request.params.id });
   } catch (error) {
     sendError(response, error);
   }

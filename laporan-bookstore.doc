@@ -23,6 +23,7 @@
     <ul>
       <li>Add, update, delete kategori buku.</li>
       <li>Add, update, delete data buku.</li>
+      <li>Upload file gambar buku saat menambah atau memperbarui data buku.</li>
       <li>Melihat daftar user yang sudah terdaftar.</li>
       <li>Melihat daftar pesanan buku dari user yang berbeda.</li>
       <li>Mengubah status pengiriman pesanan.</li>

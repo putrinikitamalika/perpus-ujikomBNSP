@@ -221,7 +221,11 @@
                   <div class="col-md-4"><label class="form-label" for="bookCategory">Kategori</label><select id="bookCategory" class="form-select" required></select></div>
                   <div class="col-md-4"><label class="form-label" for="bookPrice">Harga</label><input id="bookPrice" class="form-control" type="number" min="1000" required></div>
                   <div class="col-md-4"><label class="form-label" for="bookStock">Stok</label><input id="bookStock" class="form-control" type="number" min="0" required></div>
-                  <div class="col-md-8"><label class="form-label" for="bookImage">URL Gambar</label><input id="bookImage" class="form-control" type="url" required></div>
+                  <div class="col-md-8">
+                    <label class="form-label" for="bookImageFile">Upload Gambar</label>
+                    <input id="bookImageFile" class="form-control" type="file" accept="image/*">
+                    <div id="bookImagePreview" class="form-text">Upload gambar wajib untuk buku baru. Saat update, kosongkan jika gambar tidak berubah.</div>
+                  </div>
                   <div class="col-md-4"><label class="form-label" for="bookRating">Rating</label><input id="bookRating" class="form-control" type="number" min="1" max="5" step="0.1" required></div>
                   <div class="col-12"><label class="form-label" for="bookDescription">Deskripsi</label><textarea id="bookDescription" class="form-control" rows="3" required></textarea></div>
                   <div class="col-12 d-flex gap-2"><button class="btn btn-success" type="submit">Simpan Buku</button><button class="btn btn-outline-secondary" id="resetBookBtn" type="button">Reset</button></div>

@@ -2,7 +2,7 @@
 
 Aplikasi BookStore full-stack untuk praktik demonstrasi Junior Web Developer. Aplikasi ini memakai backend Express dan database PostgreSQL, serta memiliki dua aktor:
 
-- **Admin**: mengelola kategori buku, data buku, melihat user terdaftar, pesanan, mengubah status pengiriman, dan pesan kontak.
+- **Admin**: mengelola kategori buku, data buku beserta upload gambar, melihat user terdaftar, pesanan, mengubah status pengiriman, dan pesan kontak.
 - **User**: registrasi, login, melihat About Us, mengirim pesan ke admin, mencari buku, add to cart, checkout dengan metode Payment at Delivery, dan melihat status pengiriman buku.
 
 ## Cara Menjalankan
@@ -64,6 +64,7 @@ CACHE_DRIVER=database
 - `package.json`: daftar dependency dan script menjalankan aplikasi.
 - `.env`: konfigurasi koneksi PostgreSQL lokal.
 - `.env.example`: contoh konfigurasi environment.
+- `uploads/books/`: folder penyimpanan gambar buku yang diupload admin, dibuat otomatis saat server berjalan.
 - `mockup.html`: mockup/wireframe sederhana untuk rancangan aplikasi.
 - `laporan-bookstore.md`: template laporan untuk disalin ke Ms. Word.
 - `laporan-bookstore.doc`: laporan yang dapat dibuka di Ms. Word.
